@@ -1,46 +1,39 @@
+<script setup lang="ts">
+import { Video } from "../types/Video";
+import { onMounted, ref } from "vue";
+import firebase from "../firebase/setup";
+const videos = ref()
+async function getData() {
+  const querySnapshot = await firebase.getCollection("Videos");
+  const Videos = Array<Video>();
+  querySnapshot.forEach((doc) => {
+    const video: Video = {
+      name: doc.data().name,
+      ytUrl: doc.data().ytUrl,
+      id: doc.data().id,
+      docId: doc.id,
+      creators: [""],
+    };
+    Videos.push(video);
+  });
+  return Videos;
+}
+onMounted(async () => {
+  videos.value = await getData()
+})
+</script>
 <template>
   <div class="home">
-    <h3>Counter: {{ counter }}</h3>
-    <h5>Double Counter value: {{ double() }}</h5>
-    <br />
-    <button @click="increment">Increment</button>
-    <br />
-    <input v-model="val" type="number" />
-    <button @click="addValue(val)">Increment by value</button>
-    <br />
-    <button @click="reset">Reset</button>
+    <h2>Videos</h2>
+    <div v-for="video in videos" :key="video.id" class="videoBox">
+      <router-link
+        :to="{
+          name: 'Video',
+          params: { videoId: video.docId },
+        }"
+      >
+        <h5>{{ video.name }}</h5>
+      </router-link>
+    </div>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-import { useCounterStore } from "@/store/counter";
-
-export default defineComponent({
-  name: "Home",
-  components: {},
-  data: () => ({
-    val: 0
-  }),
-  setup() {
-    const counter = useCounterStore();
-    function reset() {
-      counter.patch({
-        counter: 0
-      });
-    }
-
-    function double() {
-      return counter.getCounter.value * 2;
-    }
-
-    return {
-      reset,
-      increment: counter.incrementCounter,
-      counter: counter.getCounter,
-      addValue: counter.addValue,
-      double
-    };
-  }
-});
-</script>
