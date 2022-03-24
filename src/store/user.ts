@@ -15,6 +15,9 @@ export const userStore = createStore({
   actions: {
     setUser(user) {
       this.state.user = user
+    },
+    loggedIn() {
+      this.state.loggedIn = true
     }
   }
 })
