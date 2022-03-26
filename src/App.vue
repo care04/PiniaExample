@@ -2,15 +2,24 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/login" v-if="!store.state.loggedIn">Login</router-link> 
+      <router-link to="/login" v-if="!store.state.loggedIn">Login</router-link>
+      <button @click="logOut" v-if="store.state.loggedIn">Log Out</button>
     </div>
     <router-view/>
   </div>
 </template>
 <script setup lang="ts">
 import { userStore } from "./store/user"
+import { auth } from "./firebase/setup"
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const store = userStore()
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+async function logOut() {
+  await auth.signOut()
+  .then(() => {
+    store.loggedOut()
+  })
+}
 </script>
 
 <style>

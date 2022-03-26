@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/setup";
-import { userStore } from "../store/user"
+import { userStore } from "../store/user";
+import router from "../router"
 const store = userStore()
 function loggedIn() {
   store.loggedIn()
@@ -11,6 +12,7 @@ function logUserIn(email: string, password: string) {
   signInWithEmailAndPassword(auth, email, password)
     .then(() => {
       loggedIn()
+      router.push("/")
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -26,6 +28,7 @@ function logUserIn(email: string, password: string) {
     <input v-model="email" />
     <p>Password</p>
     <input v-model="password" />
+    <p>{{"    "}}</p>
     <button @click="logUserIn(email, password)">Login</button>
     <p>or</p>
     <router-link to="create-account">

@@ -18,6 +18,9 @@ export const userStore = createStore({
     },
     loggedIn() {
       this.state.loggedIn = true
+    },
+    loggedOut() {
+      this.state.loggedIn = false
     }
   }
 })

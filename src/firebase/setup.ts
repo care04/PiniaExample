@@ -29,7 +29,7 @@ export default {
   },
   async comments(docId: string) {
     const commentSnapShot = await getDocs(
-      collection(db, "Videos", docId, "Comments")
+      collection(db, "Videos/", docId, "Comments")
     );
     return commentSnapShot;
   },
