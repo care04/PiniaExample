@@ -87,7 +87,7 @@ async function postComment() {
       userId: user.value.id,
       id: commentId,
       videoTime: newCommentTimeStamp.value,
-      date: serverTimestamp,
+      date: serverTimestamp(),
     };
     console.log(video.value.docId)
     firebase.addComment(comment, video.value.docId);

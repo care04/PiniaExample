@@ -10,7 +10,7 @@ export interface Comment {
   id: string;
   userId: string;
   videoTime: number;
-  date: unknown;
+  date: date;
 }
 export interface User {
   name: string;

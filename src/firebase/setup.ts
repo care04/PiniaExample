@@ -38,7 +38,20 @@ export default {
     return querySnapshot;
   },
   async addComment(comment: Comment, docId: string) {
-    await addDoc(collection(db, "Videos", docId, "Comments"), comment);
+    const date = comment.date
+    console.log("date: ", date)
+    try {
+      const docRef = await addDoc(collection(db, "Videos", docId, "Comments"), {
+        commentTxt: comment.commentTxt,
+        date: comment.date,
+        id: comment.id,
+        userId: comment.userId,
+        videoTime: comment.videoTime
+      });
+      console.log("doc id", docRef.id)
+    } catch(error) {
+      console.log("error adding document", error)
+    }
   },
   async addUser(user: User) {
     try {
