@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../firebase/setup";
+import firebase, { auth } from "../firebase/setup";
 import { User } from "../types/Video";
 import { ref } from "vue";
 import { userStore } from "../store/user"
+import router from "../router"
 const store = userStore()
 const name = ref();
 const email = ref();
@@ -33,6 +34,9 @@ function createAccount() {
           email: email.value,
         };
         store.setUser(user)
+        firebase.addUser(user)
+        store.loggedIn()
+        router.push("/")
       })
       .catch((error) => {
         console.log("error", error.code, ": ", error.message);

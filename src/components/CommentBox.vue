@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <h3>{{ comment.userId }}: {{ comment.date }}</h3>
+      <h3>{{ userName }}: {{ comment.date }}</h3>
       <p class="videoTime">{{ comment.videoTime }}</p>
       <p class="commentTxt">
         {{ comment.commentTxt }}
@@ -10,10 +10,26 @@
   </div>
 </template>
 <script>
-import { Comment } from "../firebase/setup";
+import firebase from "../firebase/setup"
 export default {
   props: {
-    comment: Comment,
+    comment: null,
   },
+  data() {
+    return {
+      userName: ""
+    }
+  },
+  methods: {
+    async getUserName(id) {
+      const userSnapShot = await firebase.getUser(id)
+      userSnapShot.forEach((doc) => {
+        this.userName = doc.data().name
+      })
+    }
+  },
+  async created() {
+    this.getUserName(this.comment.userId)
+  }
 };
 </script>

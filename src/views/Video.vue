@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { Video, Comment, User } from "../types/Video";
-import firebase from "../firebase/setup";
+import { Video, Comment } from "../types/Video";
+import firebase, { auth } from "../firebase/setup";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { YoutubeVue3 } from "youtube-vue3";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -13,13 +13,6 @@ interface Props {
 // eslint-disable-next-line no-undef
 const props = defineProps<Props>();
 const COMMENTS = ref();
-const user = ref<User>({
-  name: "LuAnne Cadet",
-  id: "asdfasef",
-  creator: false,
-  password: "",
-  email: "",
-});
 const commentText = ref();
 const newCommentTimeStamp = ref();
 const youtube = ref();
@@ -84,7 +77,7 @@ async function postComment() {
   if (commentText.value.length > 0) {
     const comment: Comment = {
       commentTxt: commentText.value,
-      userId: user.value.id,
+      userId: auth.currentUser?.uid ?? "",
       id: commentId,
       videoTime: newCommentTimeStamp.value,
       date: serverTimestamp(),
