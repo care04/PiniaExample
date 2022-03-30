@@ -7,12 +7,16 @@ import { YoutubeVue3 } from "youtube-vue3";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import CommentBox from "../components/CommentBox.vue";
 import { serverTimestamp } from "firebase/firestore";
+import { userStore } from "../store/user"
+const store = userStore()
 interface Props {
   videoId: string;
 }
 // eslint-disable-next-line no-undef
 const props = defineProps<Props>();
 const COMMENTS = ref();
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+let notLoggedInError = false
 const commentText = ref();
 const newCommentTimeStamp = ref();
 const youtube = ref();
@@ -72,23 +76,29 @@ async function commentStarted() {
 }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function postComment() {
-  const date = new Date();
-  const commentId = "_" + Math.random().toString(36).substr(2, 9);
-  if (commentText.value.length > 0) {
-    const comment: Comment = {
-      commentTxt: commentText.value,
-      userId: auth.currentUser?.uid ?? "",
-      id: commentId,
-      videoTime: newCommentTimeStamp.value,
-      date: serverTimestamp(),
-    };
-    firebase.addComment(comment, video.value.docId);
-    commentText.value = "";
-    comment.date = formatDate(date);
-    COMMENTS.value.push(comment);
+  if (store.state.loggedIn) {
+    const date = new Date();
+    const commentId = "_" + Math.random().toString(36).substr(2, 9);
+    if (commentText.value.length > 0) {
+      const comment: Comment = {
+        commentTxt: commentText.value,
+        userId: auth.currentUser?.uid ?? "",
+        id: commentId,
+        videoTime: newCommentTimeStamp.value,
+        date: serverTimestamp(),
+      };
+      firebase.addComment(comment, video.value.docId);
+      commentText.value = "";
+      comment.date = formatDate(date);
+      COMMENTS.value.push(comment);
+    }
+  } else {
+    notLoggedInError = true
+    console.log("must log in to post comments", notLoggedInError)
   }
 }
 onMounted(async() => {
+  console.log(auth.currentUser?.uid)
   video.value = await VIDEO()
   COMMENTS.value = await Comments()
 })
@@ -104,8 +114,10 @@ onMounted(async() => {
       :height="320"
     />
     <br />
-    <input @click="commentStarted" v-model="commentText" />
-    <button @click="postComment">Post</button>
+    <div v-if="store.state.loggedIn">
+      <input @click="commentStarted" v-model="commentText" />
+      <button @click="postComment">Post</button>
+    </div>
     <div v-for="comment in COMMENTS" :key="comment.id">
       <CommentBox
         :comment="comment"
