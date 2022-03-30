@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase/setup";
+import firebase, { auth } from "../firebase/setup";
 import { userStore } from "../store/user";
 import router from "../router"
 const store = userStore()
@@ -10,8 +10,13 @@ function loggedIn() {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function logUserIn(email: string, password: string) {
   signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
+    .then(async (data) => {
       loggedIn()
+      const user = await firebase.getUser(data.user.uid)
+      user.forEach((doc) => {
+        store.setUser(doc.data())
+        console.log("doc data", doc.data(), store.state.user)
+      })
       router.push("/")
     })
     .catch((error) => {

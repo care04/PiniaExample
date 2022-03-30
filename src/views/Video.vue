@@ -89,7 +89,6 @@ async function postComment() {
       videoTime: newCommentTimeStamp.value,
       date: serverTimestamp(),
     };
-    console.log(video.value.docId)
     firebase.addComment(comment, video.value.docId);
     commentText.value = "";
     comment.date = formatDate(date);

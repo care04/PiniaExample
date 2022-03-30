@@ -8,6 +8,8 @@ import {
   getDoc,
   doc,
   addDoc,
+  query,
+  where,
 } from "firebase/firestore";
 const firebaseConfig = {
   apiKey: "AIzaSyDbR7Ye2czRrEyX7XP9AVyBgIc9K1pLAmM",
@@ -56,9 +58,15 @@ export default {
   async addUser(user: User) {
     try {
       const docRef = await addDoc(collection(db, "Users"), user);
-      console.log("doc id",docRef.id)
+      return docRef.id
     } catch(error) {
       console.log("error adding document", error)
     }
   },
+  async getUser(id: string) {
+    const userRef = collection(db, "Users")
+    const q =  query(userRef, where("id", "==", id))
+    const snap = await getDocs(q)
+    return snap
+  }
 };

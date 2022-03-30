@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import firebase, { auth } from "../firebase/setup";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "../firebase/setup";
 import { User } from "../types/Video";
 import { ref } from "vue";
+import { userStore } from "../store/user"
+const store = userStore()
 const name = ref();
 const email = ref();
 const password = ref();
@@ -15,10 +17,14 @@ function greatorThanZero(text: Array<string>) {
   });
   return true;
 }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function createAccount() {
   if (greatorThanZero([name.value, email.value, password.value])) {
     createUserWithEmailAndPassword(auth, email.value, password.value)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
+        updateProfile(userCredential.user, {
+          displayName: name.value
+        })
         const user: User = {
           name: name.value,
           id: userCredential.user.uid,
@@ -26,7 +32,7 @@ function createAccount() {
           password: password.value,
           email: email.value,
         };
-        firebase.addUser(user);
+        store.setUser(user)
       })
       .catch((error) => {
         console.log("error", error.code, ": ", error.message);
