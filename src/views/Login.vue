@@ -15,6 +15,9 @@ function logUserIn(email: string, password: string) {
       const user = await firebase.getUser(data.user.uid)
       user.forEach((doc) => {
         store.setUser(doc.data())
+        if (doc.data().creator == true ) {
+          store.state.videos = doc.data().videos
+        }
       })
       router.push("/")
     })

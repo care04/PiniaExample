@@ -2,6 +2,7 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Home</router-link> |
+      <router-link to="/account-page" v-if="store.state.loggedIn">Account</router-link> |
       <router-link to="/login" v-if="!store.state.loggedIn">Login</router-link>
       <button @click="logOut" v-if="store.state.loggedIn">Log Out</button>
     </div>

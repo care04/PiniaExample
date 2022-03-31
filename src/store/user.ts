@@ -11,6 +11,7 @@ export const userStore = createStore({
       email: "",
     },
     loggedIn: false,
+    videos: [],
   }),
   actions: {
     setUser(user) {
