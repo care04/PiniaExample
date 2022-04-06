@@ -1,5 +1,5 @@
 import { createStore } from "pinia";
-import { signInWithEmailAndPassword } from "firebase/auth"
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
 import firebase, { auth } from "../firebase/setup";
 import router from "../router"
 
@@ -17,14 +17,16 @@ export const userStore = createStore({
     videos: [],
   }),
   actions: {
-    setUser(user) {
-      this.state.user = user
-    },
-    loggedIn() {
-      this.state.loggedIn = true
-    },
     loggedOut() {
       this.state.loggedIn = false
+      this.state.user = {
+        name: "",
+        id: "",
+        creator: false,
+        password:"",
+        email: "",
+      }
+      this.state.videos = []
     },
     logIn(email: string, password: string) {
       signInWithEmailAndPassword(auth, email, password)
@@ -48,6 +50,29 @@ export const userStore = createStore({
         })
         .catch((error) => {
           console.log("error", error.code, error.message)
+          return error
+        })
+    },
+    createUser(name: string, email: string, password: string, creator: boolean) {
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(async (userCredential) => {
+          updateProfile(userCredential.user, {
+            displayName: name
+          })
+          const user = {
+            name: name,
+            id: userCredential.user.uid,
+            creator: creator,
+            password: password,
+            email: email,
+          }
+          this.state.user = user
+          firebase.addUser(user)
+          this.state.loggedIn = true
+          router.push("/")
+        })
+        .catch((error) => {
+          console.log(error)
           return error
         })
     }
