@@ -15,6 +15,8 @@ export const userStore = createStore({
     },
     loggedIn: false,
     videos: [],
+    errorAlert: "",
+    error: false,
   }),
   actions: {
     loggedOut() {
@@ -46,11 +48,13 @@ export const userStore = createStore({
               this.state.videos = doc.data().videos
             }
           })
+          this.state.error = false
+          this.state.errorAlert = ""
           router.push("/")
         })
         .catch((error) => {
-          console.log("error", error.code, error.message)
-          return error
+          this.state.errorAlert = error.message
+          this.state.error = true
         })
     },
     createUser(name: string, email: string, password: string, creator: boolean) {
@@ -69,11 +73,13 @@ export const userStore = createStore({
           this.state.user = user
           firebase.addUser(user)
           this.state.loggedIn = true
+          this.state.error = false
+          this.state.errorAlert = ""
           router.push("/")
         })
         .catch((error) => {
-          console.log(error)
-          return error
+          this.state.errorAlert = error.message
+          this.state.error = true
         })
     }
   }
