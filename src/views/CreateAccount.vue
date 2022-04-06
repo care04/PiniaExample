@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { userStore } from "../store/user"
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import ErrorAlert from "../components/ErrorAlert.vue";
 const store = userStore()
 const name = ref();
 const email = ref();
@@ -24,6 +26,7 @@ function createAccount() {
 <template>
   <div>
     <h4>Create Account</h4>
+    <ErrorAlert :error="store.state.errorAlert" v-if="store.state.error"/>
     <p>Name</p>
     <input v-model="name" />
     <p>Email</p>

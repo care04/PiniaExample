@@ -2,15 +2,11 @@
 import { userStore } from "../store/user";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import ErrorAlert from "../components/ErrorAlert.vue";
-import { onMounted } from "@vue/runtime-core";
 const store = userStore()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function logUserIn(email: string, password: string) {
   store.logIn(email, password)
 }
-onMounted(() => {
-  console.log("error", store.state.error, "message:", store.state.errorAlert)
-})
 </script>
 <template>
   <div>
