@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { userStore } from "../store/user"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import ErrorAlert from "../components/ErrorAlert.vue";
@@ -22,6 +22,10 @@ function createAccount() {
     store.createUser(name.value, email.value, password.value, creator.value)
   }
 }
+onMounted(() => {
+  store.state.error = false
+  store.state.errorAlert = ""
+})
 </script>
 <template>
   <div>
