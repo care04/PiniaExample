@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { Comment, User } from "../types/Video";
+import { Comment, User, FirebaseVieo } from "../types/Video";
 import { getAuth } from "firebase/auth";
 import {
   getFirestore,
@@ -24,6 +24,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 const db = getFirestore(app);
+
 export default {
   async getCollection(path: string) {
     const querySnapshot = await getDocs(collection(db, path));
@@ -38,6 +39,19 @@ export default {
   async getVideo(docId: string) {
     const querySnapshot = await getDoc(doc(db, "Videos", docId));
     return querySnapshot;
+  },
+  async addVideo(video: FirebaseVieo) {
+    try {
+      const docRef = await addDoc(collection(db, "Videos"), {
+        name: video.name,
+        id: video.id,
+        ytUrl: video.ytUrl,
+        creators: video.creators
+      })
+      return docRef.id
+    } catch(error) {
+      console.log(error)
+    }
   },
   async addComment(comment: Comment, docId: string) {
     try {

@@ -4,6 +4,7 @@ import Video from '../views/Video.vue'
 import Login from '../views/Login.vue'
 import CreateAccount from '../views/CreateAccount.vue'
 import AccountPage from '../views/AccountPage.vue'
+import AddVideo from '../views/AddVideo.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -25,6 +26,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/account-page',
     name: 'AccountPage',
     component: AccountPage,
+  },
+  {
+    path: '/add-video',
+    name: 'AddVideo',
+    component: AddVideo,
   },
   {
     path: '/:videoId',

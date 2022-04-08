@@ -18,7 +18,8 @@ onMounted(() => {
     <h4>{{ user.email }}</h4>
     <button>Edit Account</button>
     <div v-if="user.creator == true">
-      <h1>Video's Created</h1> <button> + </button>
+      <h1>Video's Created</h1> 
+      <router-link to="/add-video"><button> + </button></router-link>
       <div v-for="video in videos" :key="video.id">
         <h4>{{ video }}</h4>
       </div>

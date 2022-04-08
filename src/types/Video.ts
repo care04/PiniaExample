@@ -19,3 +19,9 @@ export interface User {
   password: string;
   email: string;
 }
+export interface FirebaseVieo {
+  name: string,
+  id: string,
+  ytUrl: string,
+  creators: [string],
+}

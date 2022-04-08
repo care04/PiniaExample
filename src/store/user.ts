@@ -30,6 +30,9 @@ export const userStore = createStore({
       }
       this.state.videos = []
     },
+    addVideo(video) {
+      this.state.videos += video
+    },
     logIn(email: string, password: string) {
       signInWithEmailAndPassword(auth, email, password)
         .then(async (data) => {
