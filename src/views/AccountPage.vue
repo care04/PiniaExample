@@ -16,7 +16,9 @@ onMounted(() => {
     <h1>{{ user.name }}</h1>
     <p>{{ user.id }}</p>
     <h4>{{ user.email }}</h4>
-    <button>Edit Account</button>
+    <router-link to="/edit-account">
+      <button>Edit Account</button>
+    </router-link>
     <div v-if="user.creator == true">
       <h1>Video's Created</h1> 
       <router-link to="/add-video"><button> + </button></router-link>

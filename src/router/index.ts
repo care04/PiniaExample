@@ -5,6 +5,7 @@ import Login from '../views/Login.vue'
 import CreateAccount from '../views/CreateAccount.vue'
 import AccountPage from '../views/AccountPage.vue'
 import AddVideo from '../views/AddVideo.vue'
+import EditAccount from '../views/EditAccount.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -21,6 +22,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/create-account',
     name: 'CreateAccount',
     component: CreateAccount,
+  },
+  {
+    path: '/edit-account',
+    name: 'EditAccount',
+    component: EditAccount
   },
   {
     path: '/account-page',

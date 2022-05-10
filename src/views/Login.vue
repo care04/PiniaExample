@@ -20,7 +20,7 @@ onMounted(() => {
     <p>Email</p>
     <input v-model="email" />
     <p>Password</p>
-    <input v-model="password" />
+    <input type="password" v-model="password" />
     <p>{{"    "}}</p>
     <button @click="logUserIn(email, password)">Login</button>
     <p>or</p>
